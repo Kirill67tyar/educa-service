@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 from courses.utils import from_cyrilic_to_eng
 
@@ -101,3 +103,26 @@ class Module(models.Model):
     class Meta:
         verbose_name = 'Модуль'
         verbose_name_plural = 'Модули'
+
+
+# мы здесь сделали обощённую связь, чтобы соединить объекты типа Content
+# с любой другой моделью, педставляющей тип содержимого
+class Content(models.Model):
+    module = models.ForeignKey(
+        to='Module',
+        on_delete=models.CASCADE,
+        related_name='contents',
+        verbose_name='Модуль'
+    )
+    content_type = models.ForeignKey(  # Внешний ключ на ContentType (будет в бд)
+        to=ContentType,
+        on_delete=models.CASCADE,
+    )
+    object_id = models.PositiveIntegerField(  # Идентификатор связанного объекта (будет в бд)
+        verbose_name='ID объекта'
+    )
+    item = GenericForeignKey(  # обощает данные предыдущих двух полей (не будет в бд)
+        ct_field='content_type',
+        fk_field='object_id'
+    )
+

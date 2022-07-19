@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+  <object model="courses.subject" pk="1">
+    <field name="title" type="CharField">языки</field>
+    <field name="slug" type="SlugField">yazyki</field>
+  </object>
+  <object model="courses.subject" pk="2">
+    <field name="title" type="CharField">ѕрограммирование</field>
+    <field name="slug" type="SlugField">programmirovanie</field>
+  </object>
+  <object model="courses.subject" pk="3">
+    <field name="title" type="CharField">Ѕиологи€</field>
+    <field name="slug" type="SlugField">biologiya</field>
+  </object>
+  <object model="courses.subject" pk="4">
+    <field name="title" type="CharField">јрхитектура</field>
+    <field name="slug" type="SlugField">arhitektura</field>
+  </object>
+  <object model="courses.course" pk="1">
+    <field name="owner" rel="ManyToOneRel" to="auth.user">1</field>
+    <field name="subject" rel="ManyToOneRel" to="courses.subject">1</field>
+    <field name="title" type="CharField">јнглийский грамматика</field>
+    <field name="slug" type="SlugField">anglijskij-grammatika</field>
+    <field name="description" type="TextField">Ѕесплатный сервис Google позвол€ет мгновенно переводить слова, фразы и веб-страницы с английского более чем на 100 €зыков и обратно.</field>
+    <field name="created" type="DateTimeField">2022-07-19T12:03:44.102372+00:00</field>
+  </object>
+  <object model="courses.course" pk="2">
+    <field name="owner" rel="ManyToOneRel" to="auth.user">1</field>
+    <field name="subject" rel="ManyToOneRel" to="courses.subject">2</field>
+    <field name="title" type="CharField">»зучение Python</field>
+    <field name="slug" type="SlugField">izuchenie-python</field>
+    <field name="description" type="TextField">If you arenТt familiar with pip, you may also obtain a copy of the debug_toolbar directory and add it to your Python path.
+
+To test an upcoming release, you can install the in-development version instead with the following command:</field>
+    <field name="created" type="DateTimeField">2022-07-19T13:03:37.609587+00:00</field>
+  </object>
+  <object model="courses.course" pk="3">
+    <field name="owner" rel="ManyToOneRel" to="auth.user">1</field>
+    <field name="subject" rel="ManyToOneRel" to="courses.subject">3</field>
+    <field name="title" type="CharField">биоинформатика</field>
+    <field name="slug" type="SlugField">bioinformatika</field>
+    <field name="description" type="TextField">If you arenТt familiar with pip, you may also obtain a copy of the debug_toolbar directory and add it to your Python path.
+
+To test an upcoming release, you can install the in-development version instead with the following command:</field>
+    <field name="created" type="DateTimeField">2022-07-19T13:04:02.761965+00:00</field>
+  </object>
+  <object model="courses.course" pk="4">
+    <field name="owner" rel="ManyToOneRel" to="auth.user">1</field>
+    <field name="subject" rel="ManyToOneRel" to="courses.subject">4</field>
+    <field name="title" type="CharField">”роки любви</field>
+    <field name="slug" type="SlugField">uroki-lyubvi</field>
+    <field name="description" type="TextField">If you arenТt familiar with pip, you may also obtain a copy of the debug_toolbar directory and add it to your Python path.
+
+To test an upcoming release, you can install the in-development version instead with the following command:</field>
+    <field name="created" type="DateTimeField">2022-07-19T13:04:37.308564+00:00</field>
+  </object>
+  <object model="courses.module" pk="1">
+    <field name="course" rel="ManyToOneRel" to="courses.course">2</field>
+    <field name="title" type="CharField">“ипы данных</field>
+    <field name="description" type="TextField">If you arenТt familiar with pip, you may also obtain a copy of the debug_toolbar directory and add it to your Python path.
+
+To test an upcoming release, you can install the in-development version instead with the following command:</field>
+  </object>
+</django-objects>
