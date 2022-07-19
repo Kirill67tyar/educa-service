@@ -34,15 +34,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'courses.apps.CoursesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -137,3 +140,6 @@ MEDIA_URL = '/media/'
 
 # путь в файловой системе, где эти файлы будут храниться
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# --------------------------------------- django-debug-toolbar
+INTERNAL_IPS = ('127.0.0.1',)

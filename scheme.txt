@@ -1,0 +1,10 @@
+Схема того как выглядит проект курсов:
+Subject (предмет):
+	Course 1
+		Module 1
+			Content (image)
+			Content (text)
+		Module 2
+			Content (file)
+			Content (text)
+			Content (video)
