@@ -1,0 +1,22 @@
+<a href="/" class="logo">
+    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+<!--    <i class="fa fa-coffee" aria-hidden="true"></i>-->
+    Educa
+</a>
+<ul class="menu">
+    {% if request.user.is_authenticated %}
+    <li>
+        <a href="{% url 'logout' %}">
+            Выйти&nbsp;
+            <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+        </a>
+    </li>
+    {% else %}
+    <li>
+        <a href="{% url 'login' %}">
+            Войти&nbsp;
+            <i class="fa fa-sign-in fa-lg" aria-hidden="true"></i>
+        </a>
+    </li>
+    {% endif %}
+</ul>

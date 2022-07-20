@@ -6,5 +6,5 @@ Subject (предмет):
 			Content (text)
 		Module 2
 			Content (file)
-			Content (text)
 			Content (video)
+			Content (text)

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список курсов
+{% endblock %}
+
+{% block content %}
+{% for obj in object_list %}
+<p>{{ obj }}</p>
+{% endfor %}
+{% endblock %}
