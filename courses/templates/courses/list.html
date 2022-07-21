@@ -5,7 +5,27 @@
 {% endblock %}
 
 {% block content %}
-{% for obj in object_list %}
-<p>{{ obj }}</p>
-{% endfor %}
+
+<h1>Мои курсы</h1>
+<div class="module">
+    {% for course in object_list %}
+    <div class="course-info">
+        <h3>
+            <a href=".">
+                {{ course }}
+            </a>
+        </h3>
+        <p>
+            <a href="{% url 'courses:course_update' course.pk %}">Изменить</a>
+            <a href="{% url 'courses:course_delete' course.pk %}">Удалить</a>
+            <a href="{% url 'courses:module_update' course.pk %}">Работа с модулями</a>
+        </p>
+    </div>
+    {% empty %}
+    <p>Список курсов пуст</p>
+    {% endfor %}
+    <p>
+        <a href="{% url 'courses:course_create' %}" class="button">Создать новый курс</a>
+    </p>
+</div>
 {% endblock %}

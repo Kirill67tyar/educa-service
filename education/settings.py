@@ -144,7 +144,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # --------------------------------------- django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
 
-
 # -------------------------------------------------------- LOGGING settings
 # https://docs.djangoproject.com/en/3.2/topics/logging/
 LOGGING = {
@@ -196,7 +195,7 @@ LOGGING = {
         # }
     },
     'loggers': {  # что мы фактически фиксируем, и куда
-        'django.db.backends': { # 'django.db.backends' - настройки фиксации логирования запросов в бд
+        'django.db.backends': {  # 'django.db.backends' - настройки фиксации логирования запросов в бд
             'handlers': ['file'],  # в записываем в файл
             'level': 'DEBUG',
         },
@@ -216,3 +215,6 @@ LOGGING = {
         # }
     }
 }
+
+# -------------------------------------------------- AUTHENTICATION SETTINGS
+LOGIN_REDIRECT_URL = 'courses:manage_course_list'
