@@ -18,7 +18,12 @@
         <p>
             <a href="{% url 'courses:course_update' course.pk %}">Изменить</a>
             <a href="{% url 'courses:course_delete' course.pk %}">Удалить</a>
-            <a href="{% url 'courses:module_update' course.pk %}">Работа с модулями</a>
+            <a href="{% url 'courses:module_update' course.pk %}">Добавить модуль</a>
+            {% with modules=course.modules.all %}
+            {% if modules %}
+            <a href="{% url 'courses:module_content_list' module_id=modules.first.pk %}">Редактировать</a>
+            {% endif %}
+            {% endwith %}
         </p>
     </div>
     {% empty %}

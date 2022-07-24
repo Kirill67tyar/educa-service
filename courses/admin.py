@@ -1,6 +1,6 @@
 from django.contrib import admin
 from courses.models import (
-    Subject, Course, Module,
+    Subject, Course, Module, Content,
 )
 
 
@@ -25,3 +25,8 @@ class CourseAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ('title',)
     }
+
+
+@admin.register(Content)
+class ContentAdmin(admin.ModelAdmin):
+    list_display = 'pk', 'module', 'order',
