@@ -4,7 +4,14 @@
 <!--    <i class="fa fa-coffee" aria-hidden="true"></i>-->
     Educa
 </a>
+{% for i in 'aaaaa' %}
+&nbsp;
+{% endfor %}
+<a href="{% url 'courses:manage_course_list' %}">
+    Мои курсы<i class="fa fa-list-ol" aria-hidden="true"></i>
+</a>
 <ul class="menu">
+
     {% if request.user.is_authenticated %}
     <li>
         <a href="{% url 'logout' %}">

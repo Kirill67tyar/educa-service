@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if subject %}
+Курсы по предмету "{{ subject }}"
+{% else %}
+Все курсы
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if subject %}
+<h1>Курсы по предмету "{{ subject }}"</h1>
+{% else %}
+<h1>Все курсы</h1>
+{% endif %}
+
+<div class="contents">
+    <h3>Предметы</h3>
+    <ul id="modules">
+        <li {% if not subject %} class="selected" {% endif %}>
+            <a href="{% url 'courses:course_list' %}">
+                ВСЕ
+            </a>
+        </li>
+        {% for s in subject_list %}
+        <li {% if s == subject %} class="selected" {% endif %}>
+            <a href="{% url 'courses:course_list_subject' subject_slug=s.slug %}">
+                {{ s.title }}
+                <br><span>{{ s.total_courses }} курсов</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="module">
+    {% for course in course_list %}
+    {% with subject=course.subject %}
+    <h3>
+        <a href="{% url 'courses:course_detail' slug=course.slug %}">
+            {{ course }}
+        </a>
+    </h3>
+    <p>
+        <a href="{% url 'courses:course_list_subject' subject_slug=subject.slug %}">
+            {{ subject.title }}
+        </a>
+        {{ course.total_modules }} модулей
+        Автор: {{ course.owner.username|title }}
+    </p>
+    {% endwith %}
+    {% if forloop.counter != course_list|length %}
+    <hr>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

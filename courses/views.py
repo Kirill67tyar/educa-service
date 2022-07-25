@@ -1,4 +1,7 @@
+from braces.views import JsonRequestResponseMixin, CsrfExemptMixin
+
 from django.apps import apps
+from django.db.models import Count
 from django.urls import reverse_lazy
 from django.forms import modelform_factory
 from django.views.generic.base import TemplateResponseMixin
@@ -66,11 +69,11 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     #     'subject', 'title', 'description',  # 'slug',
     # ]
     # success_url = reverse_lazy('courses:manage_course_list')
-    template_name = 'courses/form.html'
+    template_name = 'courses/manage/course/form.html'
 
 
 class ManageCourseListView(OwnerCourseMixin, ListView):
-    template_name = 'courses/list.html'
+    template_name = 'courses/manage/course/list.html'
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related('modules')
@@ -85,7 +88,7 @@ class CourseUpdateView(PermissionRequiredMixin, OwnerCourseEditMixin, UpdateView
 
 
 class CourseDeleteView(PermissionRequiredMixin, OwnerCourseMixin, DeleteView):
-    template_name = 'courses/delete.html'
+    template_name = 'courses/manage/course/delete.html'
     success_url = reverse_lazy('courses:manage_course_list')
     permission_required = 'courses.delete_course'
 
@@ -305,6 +308,93 @@ class ModuleContentListView(TemplateResponseMixin, View):
         return self.render_to_response(
             context={'module': module, }
         )
+
+
+class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request, *args, **kwargs):
+        for pk, order in self.request_json.items():
+            Module.objects.filter(
+                pk=pk,
+                course__owner=request.user).update(order=order)
+        return self.render_json_response(
+            context_dict={'saved': 'ok', }
+        )  # вернёт http ответ с Content-Type: application/json
+
+
+class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request, *args, **kwargs):
+        for pk, order in self.request_json.items():
+            Content.objects.filter(
+                pk=pk,
+                module__course__owner=request.user).update(order=order)
+        return self.render_json_response(
+            context_dict={'saved': 'ok', }
+        )  # вернёт http ответ с Content-Type: application/json
+
+
+# это если я решу посылать url параметры по этому адресу
+# для этого обработчика нужно изменить url шаблоны и формирование url в js-коде
+class ModuleOrContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+
+    @staticmethod
+    def get_model(model_name):
+        model_dict = {
+            'content': Content,
+            'module': Module,
+        }
+        return model_dict.get(model_name.lower())
+
+    @staticmethod
+    def get_params(pk, request, model_name):
+        lookup_dict = {
+            'content': 'course__owner',
+            'module': 'module__course__owner',
+        }
+
+        return {
+            'pk': pk,
+            lookup_dict[model_name]: request.user,
+        }
+
+    def post(self, request, model_name, *args, **kwargs):
+        model = self.get_model(model_name)
+        for pk, order in self.request_json.items():
+            params = self.get_params(
+                pk=pk,
+                request=request,
+                model_name=model_name
+            )
+            model.objects.filter(**params).update(order=order)
+        return self.render_json_response(
+            context_dict={'saved': 'ok', }
+        )  # вернёт http ответ с Content-Type: application/json
+
+
+class CourseListView(TemplateResponseMixin, View):
+    template_name = 'courses/course/list.html'
+
+    def get(self, request, subject_slug=None, *args, **kwargs):
+        subject_list = Subject.objects.annotate(total_courses=Count('courses'))
+        course_list = Course.objects.annotate(total_modules=Count('modules'))
+        subject = None
+        if subject_slug:
+            subject = get_object_or_404(
+                klass=Subject,
+                slug=subject_slug
+            )
+            course_list = course_list.filter(subject=subject)
+        return self.render_to_response(
+            context={
+                'subject': subject,
+                'subject_list': subject_list,
+                'course_list': course_list,
+            }
+        )
+
+
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = 'courses/course/detail.html'
 
 
 """

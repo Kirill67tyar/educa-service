@@ -32,7 +32,7 @@
         {% for content in module.contents.all %}
         <div data-id="{{ content.id }}">
             {% with item=content.item %}
-            <p>{{ item.title }} ({{ item|model_name }})</p>
+            <p>{{ content.order|add:1 }}) &nbsp;{{ item.title }} ({{ item|model_name }})</p>
             <a href="{% url 'courses:content_update' module.pk item|model_name item.id %}">Дополнить</a>
             <form action="{% url 'courses:content_delete' content_id=content.pk %}" method="post">
                 <input type="submit" value="Удалить">
@@ -66,7 +66,7 @@
           });
           $.ajax({
               type: 'POST',
-              url: '{# url "courses:module_order" #}',
+              url: '{% url "courses:module_order_change" %}',
               contentType: 'application/json; charset=utf-8',
               dataType: 'json',
                  data: JSON.stringify(modules_order)
@@ -84,7 +84,7 @@
 
           $.ajax({
               type: 'POST',
-              url: '{# url "courses:content_order" #}',
+              url: '{% url "courses:content_order_change" %}',
               contentType: 'application/json; charset=utf-8',
               dataType: 'json',
               data: JSON.stringify(contents_order),
