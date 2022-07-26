@@ -18,7 +18,7 @@ class RegistrationModelForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ('username', 'password', 'password2',)
-        
+
     def clean_password2(self, *args, **kwargs):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
