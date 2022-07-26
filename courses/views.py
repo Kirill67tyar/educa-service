@@ -23,6 +23,7 @@ from courses.models import (
     Module, Content,
     Text, File, Image, Video,
 )
+from students.forms import CourseEnrollForm
 from common.analize.analizetools import (
     p_dir, p_mro, p_glob, p_loc, p_type,
     delimiter, p_content, show_builtins,
@@ -395,6 +396,13 @@ class CourseListView(TemplateResponseMixin, View):
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(CourseDetailView, self).get_context_data(**kwargs)
+        ctx['enroll_form'] = CourseEnrollForm(
+            initial={'course': self.object}
+        )
+        return ctx
 
 
 """

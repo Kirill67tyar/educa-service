@@ -8,7 +8,12 @@
 &nbsp;
 {% endfor %}
 <a href="{% url 'courses:manage_course_list' %}">
-    Мои курсы<i class="fa fa-list-ol" aria-hidden="true"></i>
+    Мои курсы&nbsp;
+    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+</a>
+&nbsp;&nbsp;
+<a href="{% url 'courses:course_list' %}">
+    Все курсы&nbsp;<i class="fa fa-list-ol" aria-hidden="true"></i>
 </a>
 <ul class="menu">
 

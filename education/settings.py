@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'students.apps.StudentsConfig',
+    'debug_toolbar',
+    'embed_video',
+
 ]
 
 MIDDLEWARE = [
@@ -140,7 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 
 # путь в файловой системе, где эти файлы будут храниться
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # --------------------------------------- django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
@@ -218,4 +220,15 @@ LOGGING = {
 }
 
 # -------------------------------------------------- AUTHENTICATION SETTINGS
+
+# -------------------------------------- LOGIN
+
+# куда django будет перенаправлять при успешной авторизации (если не указан GET параметр next)
 LOGIN_REDIRECT_URL = 'courses:manage_course_list'
+
+# при декоратре @login_required или LoginRequiredMixin - куда перенаравлять для авторизации
+LOGIN_URL = 'login'
+
+# адрес по которому пользователь выйдет из своего аккаунта (разорвётся сессия)
+LOGOUT_URL = 'logout'
+# -------------------------------------- LOGIN

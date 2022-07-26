@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
@@ -68,6 +69,12 @@ class Course(models.Model):
         auto_now_add=True,
         db_index=True,
         verbose_name='Создан'
+    )
+
+    students = models.ManyToManyField(
+        to=User,
+        related_name='courses_joined',
+        blank=True
     )
 
     def __str__(self):
@@ -177,6 +184,14 @@ class BaseItem(models.Model):
 
     class Meta:
         abstract = True
+
+    def render(self):
+        return render_to_string(
+            template_name=f'students/content/{self._meta.model_name}.html',
+            context={
+                'item': self,
+            }
+        )
 
 
 class Text(BaseItem):
