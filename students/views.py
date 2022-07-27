@@ -91,7 +91,8 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(StudentCourseDetailView, self).get_context_data(**kwargs)
-        course = self.get_object()
+        # course = self.get_object()
+        course = ctx['object']  # так делает меньше SQL запросов
         if 'module_id' in self.kwargs:
             module = course.modules.get(pk=self.kwargs['module_id'])
         else:

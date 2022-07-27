@@ -2,12 +2,11 @@ from braces.views import JsonRequestResponseMixin, CsrfExemptMixin
 
 from django.apps import apps
 from django.db.models import Count
+from django.core.cache import cache
 from django.urls import reverse_lazy
 from django.forms import modelform_factory
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import TemplateResponseMixin
-from django.shortcuts import (
-    redirect, render, get_object_or_404,
-)
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -29,6 +28,8 @@ from common.analize.analizetools import (
     delimiter, p_content, show_builtins,
     show_doc, console, console_compose,
 )
+
+TIME_FOR_CACHE = 600 * 720  # --- 5 суток
 
 
 class OwnerMixin:
@@ -82,6 +83,14 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
 
 class CourseCreateView(PermissionRequiredMixin, OwnerCourseEditMixin, CreateView):
     permission_required = 'courses.add_course'
+
+    # def form_valid(self, form):
+    #     result = super().form_valid(form)
+    #     course = self.object
+    #     subject = course.subject
+    #     courses = Course.objects.filter(subject=subject)
+    #     cache.set(f'subject_{subject.pk}_courses', courses, TIME_FOR_CACHE)
+    #     return result
 
 
 class CourseUpdateView(PermissionRequiredMixin, OwnerCourseEditMixin, UpdateView):
@@ -375,15 +384,29 @@ class CourseListView(TemplateResponseMixin, View):
     template_name = 'courses/course/list.html'
 
     def get(self, request, subject_slug=None, *args, **kwargs):
-        subject_list = Subject.objects.annotate(total_courses=Count('courses'))
-        course_list = Course.objects.annotate(total_modules=Count('modules'))
+        subject_list = cache.get('all_subjects')
+        if not subject_list:
+            subject_list = Subject.objects.annotate(total_courses=Count('courses'))
+            cache.set('all_subjects', subject_list, TIME_FOR_CACHE)  # 600 * 720   --- 5 суток
+
+        all_courses = Course.objects.annotate(total_modules=Count('modules')).select_related('owner', 'subject')
         subject = None
         if subject_slug:
             subject = get_object_or_404(
                 klass=Subject,
                 slug=subject_slug
             )
-            course_list = course_list.filter(subject=subject)
+            # course_list = cache.get(f'subject_{subject.pk}_courses')
+            course_list = None
+            if not course_list:
+                course_list = all_courses.filter(subject=subject)
+                # cache.set(f'subject_{subject.pk}_courses', course_list, TIME_FOR_CACHE)  # 600 * 720   --- 5 суток
+        else:
+            course_list = cache.get('all_courses')
+            course_list = None
+            if not course_list:
+                course_list = all_courses
+                # cache.set('all_courses', all_courses)
         return self.render_to_response(
             context={
                 'subject': subject,

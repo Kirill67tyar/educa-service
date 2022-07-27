@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'debug_toolbar',
     'embed_video',
+    'memcache_status',
 
 ]
 
@@ -219,8 +220,6 @@ LOGGING = {
     }
 }
 
-# -------------------------------------------------- AUTHENTICATION SETTINGS
-
 # -------------------------------------- LOGIN
 
 # куда django будет перенаправлять при успешной авторизации (если не указан GET параметр next)
@@ -231,4 +230,11 @@ LOGIN_URL = 'login'
 
 # адрес по которому пользователь выйдет из своего аккаунта (разорвётся сессия)
 LOGOUT_URL = 'logout'
-# -------------------------------------- LOGIN
+
+# -------------------------------------- CACHES
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}

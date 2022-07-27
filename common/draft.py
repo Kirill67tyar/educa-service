@@ -1,3 +1,1 @@
-from django.contrib.auth.models import User
-
-User
+from django.core.cache import cache

@@ -30,3 +30,6 @@ class CourseAdmin(admin.ModelAdmin):
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     list_display = 'pk', 'module', 'order',
+
+
+admin.site.index_template = 'memcache_status/admin_index.html'
