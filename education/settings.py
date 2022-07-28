@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'embed_video',
     'memcache_status',
+    'rest_framework',
 
 ]
 
@@ -237,4 +238,17 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     }
+}
+
+# -------------------------------------- REST_FRAMEWORK
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  # закомменть, если хочешь, чтобы отдавался чистый JSON
+    ]
 }
